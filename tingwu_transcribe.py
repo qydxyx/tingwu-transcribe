@@ -8,9 +8,10 @@
 使用前请确保设置以下环境变量：
   ALIBABA_CLOUD_ACCESS_KEY_ID
   ALIBABA_CLOUD_ACCESS_KEY_SECRET
+  TINGWU_APP_KEY          （可选，用于代替 --app-key 命令行参数）
 
 用法：
-  python tingwu_transcribe.py --file-url <URL> --app-key <AppKey> [options]
+  python tingwu_transcribe.py --file-url <URL> [--app-key <AppKey>] [options]
 """
 
 import argparse
@@ -479,17 +480,18 @@ def main():
     --language auto \\
     --no-chapters
 
-环境变量（必须提前设置）：
-  ALIBABA_CLOUD_ACCESS_KEY_ID       阿里云 AccessKey ID
-  ALIBABA_CLOUD_ACCESS_KEY_SECRET   阿里云 AccessKey Secret
+环境变量：
+  ALIBABA_CLOUD_ACCESS_KEY_ID       阿里云 AccessKey ID（必须）
+  ALIBABA_CLOUD_ACCESS_KEY_SECRET   阿里云 AccessKey Secret（必须）
+  TINGWU_APP_KEY                    通义听悟 AppKey（可选，代替 --app-key）
         """,
     )
 
     # 必选参数
     parser.add_argument("--file-url", required=True,
                         help="音视频文件的公网 HTTP/HTTPS URL（必须可公开访问）")
-    parser.add_argument("--app-key", required=True,
-                        help="通义听悟管控台创建的 AppKey")
+    parser.add_argument("--app-key", default=None,
+                        help="通义听悟管控台创建的 AppKey（也可通过环境变量 TINGWU_APP_KEY 设置）")
 
     # 识别参数
     parser.add_argument("--language", default="cn",
@@ -521,6 +523,14 @@ def main():
                         help="最大等待时间（秒，默认: 10800 = 3小时）")
 
     args = parser.parse_args()
+
+    # 若未通过命令行传入 --app-key，则尝试从环境变量读取
+    if not args.app_key:
+        args.app_key = os.environ.get("TINGWU_APP_KEY")
+    if not args.app_key:
+        print("❌ 未指定 AppKey，请通过 --app-key 参数或环境变量 TINGWU_APP_KEY 设置。")
+        print("   export TINGWU_APP_KEY=<你的 AppKey>")
+        sys.exit(1)
 
     # 构建客户端
     client = build_client()

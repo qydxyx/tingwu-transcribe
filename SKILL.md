@@ -29,12 +29,13 @@ allowed-tools: [Bash, Read, Write]
 ```bash
 export ALIBABA_CLOUD_ACCESS_KEY_ID=<你的 AccessKey ID>
 export ALIBABA_CLOUD_ACCESS_KEY_SECRET=<你的 AccessKey Secret>
+export TINGWU_APP_KEY=<你的 AppKey>   # 推荐设置，可以省去下面每次命令的 --app-key 参数
 ```
 
 ### 必须的参数
 
 - `--file-url`：音视频文件的**公网可访问** HTTP/HTTPS URL（不支持本地文件路径）
-- `--app-key`：在[通义听悟管控台](https://nls-portal.console.aliyun.com/tingwu/projects)创建的 AppKey
+- `--app-key`：在[通义听悟管控台](https://nls-portal.console.aliyun.com/tingwu/projects)创建的 AppKey。如已设置 `TINGWU_APP_KEY` 环境变量则可省略此参数。
 
 ---
 
@@ -64,6 +65,14 @@ pip show aliyun-python-sdk-core > /dev/null 2>&1 || pip install -r "$SKILL_DIR/r
 
 基础用法（使用用户提供的参数）：
 
+```bash
+python "$HOME/.claude/skills/tingwu-transcribe/tingwu_transcribe.py" \
+  --file-url "<用户提供的 URL>" \
+  --language cn \
+  --output "<输出文件名>.md"
+```
+
+若用户没有设置 `TINGWU_APP_KEY` 环境变量，则需要加上 `--app-key` 参数：
 ```bash
 python "$HOME/.claude/skills/tingwu-transcribe/tingwu_transcribe.py" \
   --file-url "<用户提供的 URL>" \
@@ -97,7 +106,7 @@ python "$HOME/.claude/skills/tingwu-transcribe/tingwu_transcribe.py" \
 | 参数 | 说明 | 默认值 |
 |------|------|--------|
 | `--file-url` | 音视频文件公网 URL（必选） | — |
-| `--app-key` | 通义听悟 AppKey（必选） | — |
+| `--app-key` | 通义听悟 AppKey（可用环境变量 `TINGWU_APP_KEY` 替代） | `$TINGWU_APP_KEY` |
 | `--language` | 源语言：cn/en/yue/ja/ko/auto/multilingual | `cn` |
 | `--speaker-count` | 说话人数量（0=自动检测） | `0` |
 | `--enable-translation` | 翻译目标语言（en/cn/ja/ko/de/fr/ru） | 不翻译 |

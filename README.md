@@ -21,15 +21,24 @@ pip install -r requirements.txt
 ```
 
 ### 2. 环境变量设置
-您需要配置阿里云的 AccessKey ID 和 AccessKey Secret：
+您需要配置阿里云的 AccessKey。AppKey 推荐也以环境变量方式配置，避免每次命令行重复输入：
 ```bash
 export ALIBABA_CLOUD_ACCESS_KEY_ID="<your_access_key_id>"
 export ALIBABA_CLOUD_ACCESS_KEY_SECRET="<your_access_key_secret>"
+export TINGWU_APP_KEY="<your_app_key>"         # 可选，代替 --app-key 参数
 ```
 
 ## 🚀 使用方法
 
-基础转录任务：
+基础转录任务（AppKey 通过环境变量设置，无需命令行传入）：
+```bash
+python tingwu_transcribe.py \
+  --file-url "https://example.com/audio.mp3" \
+  --language cn \
+  --output "transcription_result.md"
+```
+
+也可以通过 `--app-key` 参数临时覆盖环境变量：
 ```bash
 python tingwu_transcribe.py \
   --file-url "https://example.com/audio.mp3" \
@@ -53,7 +62,7 @@ python tingwu_transcribe.py \
 | 参数 | 说明 | 默认值 |
 |------|------|--------|
 | `--file-url` | 音视频文件公网 URL（**必选**，不支持本地路径） | 无 |
-| `--app-key` | 通义听悟 AppKey（**必选**） | 无 |
+| `--app-key` | 通义听悟 AppKey（可通过环境变量 `TINGWU_APP_KEY` 替代） | `$TINGWU_APP_KEY` |
 | `--language` | 源语言 (`cn`/`en`/`yue`/`ja`/`ko`/`auto`/`multilingual`) | `cn` |
 | `--speaker-count` | 说话人数量（0=自动检测） | `0` |
 | `--enable-translation` | 翻译目标语言 (`en`/`cn`/`ja`/`ko`/`de`/`fr`/`ru`) | 无（不翻译） |
