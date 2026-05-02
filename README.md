@@ -17,7 +17,7 @@
 
 ### 1. 环境依赖
 ```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 ### 2. 环境变量设置

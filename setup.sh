@@ -5,7 +5,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "🔧 安装通义听悟 Skill 所需依赖..."
-pip install -r "$SCRIPT_DIR/requirements.txt" -q
+uv pip install -r "$SCRIPT_DIR/requirements.txt" -q
 
 echo "✅ 依赖安装完成！"
 echo ""

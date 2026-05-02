@@ -29,7 +29,7 @@ try:
     from aliyunsdkcore.auth.credentials import AccessKeyCredential
 except ImportError:
     print("❌ 缺少依赖：aliyun-python-sdk-core")
-    print("   请运行：pip install aliyun-python-sdk-core")
+    print("   请运行：uv pip install aliyun-python-sdk-core")
     sys.exit(1)
 
 
